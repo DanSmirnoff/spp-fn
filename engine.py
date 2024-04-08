@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+
 t_min, t_max = 0, 10000      # Определяем временной интервал
 t = np.arange(t_min, t_max)  # Задаем массив значений времени
 N = t_max//2                 # Выбираем срез времени для дальнейших тестов
@@ -29,7 +30,7 @@ def stocks(Wiener: list, loc: float, scale: float) -> list:
     return S
 
 
-def get_section(N: int=N, N_max: int=t_max, count: int=1000000) -> list:
+def get_section(N: int = N, N_max: int = t_max, count: int = 1000000) -> list:
     """
     Делает срез в момент времени N
     count раз
