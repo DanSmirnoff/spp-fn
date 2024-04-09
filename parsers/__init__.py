@@ -1,0 +1,1 @@
+from .lenta import LentaRuParser
