@@ -1,12 +1,8 @@
-from typing import Dict
-
 import pandas as pd
-from parsers import LentaRuParser
+import requests
 
 
-def get_news(params: Dict[str, str], num: int) -> pd.DataFrame:
-    parser = LentaRuParser()
-    news = parser.get_articles(params, save_excel=False)
-    news = news.iloc[::-1]
-    return news[:min(num, len(news))]
-
+def get_news(num: int) -> pd.DataFrame:
+    url = "http://127.0.0.1:8000/api/v1/news"
+    response = requests.post(url, json={"num": num})
+    return pd.DataFrame(response.json()).loc[::-1]
