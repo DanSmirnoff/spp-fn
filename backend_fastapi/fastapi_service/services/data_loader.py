@@ -27,14 +27,8 @@ class AbstractDataLoader(ABC):
 
 
 class DataLoader(AbstractDataLoader):
-    # принимает название файла и возвращает / обновляет его
 
     def get_data(self, **kwargs) -> bytes:
-        """
-        kwargs:
-            bucket-name
-            key
-        """
 
         response = s3.get_object(Bucket=kwargs['bucket'], Key=kwargs['key'])
         data_bytes = response['Body'].read()
