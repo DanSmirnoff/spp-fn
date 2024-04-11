@@ -2,9 +2,9 @@ from logging import config as logging_config
 
 from fastapi import FastAPI
 
-from backend_fastapi.fastapi_service.api.v1 import model_server
-from backend_fastapi.fastapi_service.settings.logger import LOGGING
-from backend_fastapi.fastapi_service.settings.settings import settings
+from .api.v1 import model_server
+from .settings.logger import LOGGING
+from .settings.settings import settings
 
 app = FastAPI(
     title=settings.project.project_name,
@@ -24,4 +24,4 @@ async def startup():
         logging_config.dictConfig(LOGGING)
 
 
-app.include_router(model_server.router, prefix="/api/v1/model_server", tags=["ml/dl"])
+app.include_router(model_server.router, prefix="/api/v1", tags=["ml/dl"])

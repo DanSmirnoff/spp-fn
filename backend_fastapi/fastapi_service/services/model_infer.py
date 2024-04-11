@@ -11,8 +11,6 @@ def infer_model(df: pd.DataFrame) -> bool:
     """
     receives dataframe with dates
     makes predictions and updates model_pred.csv
-    :param df:
-    :return:
     """
     model = CatBoostRegressor()
     model.load_model('backend_fastapi/data/catboost_model')
