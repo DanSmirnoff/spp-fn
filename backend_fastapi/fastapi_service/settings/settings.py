@@ -10,7 +10,7 @@ class S3(BaseSettings):
     class Config:
         env_prefix = "S3_"
 
-    bucket: str = "bucket_name"
+    bucket: str = "spp-fn"
 
 
 class Redis(BaseSettings):
