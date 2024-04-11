@@ -96,7 +96,7 @@ class LentaRuParser:
             param_copy['dateFrom'] = dateFrom.strftime('%Y-%m-%d')
             save_counter += 1
 
-            if save_counter == save_every:
+            if save_counter == save_every and save_excel:
                 display.clear_output(wait=True)
                 out.to_excel("checkpoint_table.xlsx")
                 print('Checkpoint saved!')
