@@ -1,3 +1,4 @@
+import os
 import re
 import pandas as pd
 import moexalgo
@@ -50,12 +51,12 @@ def parse_lenta(dateFrom: str, dateTo: str) -> bool:
     df_new['date'] = df_new['url'].apply(extract_date_from_url)
     df_new = df_new[['url', 'title', 'text', 'date']]
 
-    df_old = pd.read_csv('backend_fastapi/data/lenta_news.csv')
+    df_old = pd.read_csv('data/lenta_news.csv')
 
     df = pd.concat([df_old, df_new], ignore_index=True)
     df = df.drop_duplicates(subset='url', keep='first')
 
-    df.to_csv('backend_fastapi/data/lenta_news.csv', index=False)
+    df.to_csv('data/lenta_news.csv', index=False)
 
     return True
 
@@ -75,10 +76,10 @@ def parse_imoex(dateFrom: str, dateTo: str) -> bool:
         df = pd.concat([df, df_per], ignore_index=True)
         date = date_end + timedelta(days=1)
 
-    df_old = pd.read_csv('backend_fastapi/data/imoex10m.csv')
+    df_old = pd.read_csv('data/imoex10m.csv')
     df = pd.concat([df_old, df], ignore_index=True)
     df = df.drop_duplicates(subset='begin', keep='first')
 
-    df.to_csv('backend_fastapi/data/imoex10m.csv', index=False)
+    df.to_csv('data/imoex10m.csv', index=False)
 
     return True

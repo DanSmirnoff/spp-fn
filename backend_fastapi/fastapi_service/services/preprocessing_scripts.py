@@ -33,9 +33,9 @@ def update_bert_pca():
     """
     tokenizer = AutoTokenizer.from_pretrained("Geotrend/distilbert-base-ru-cased", local_files_only=True)
     bert = AutoModel.from_pretrained("Geotrend/distilbert-base-ru-cased", local_files_only=True)
-    pca = joblib.load(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'pca_model.pkl'))) #Переделать 
+    pca = joblib.load('data/pca_model.pkl')
 
-    df_nlp = pd.read_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'lenta_news.csv'))) #Переделать 
+    df_nlp = pd.read_csv('data/lenta_news.csv')
     df_nlp = df_nlp[df_nlp['date'] == test_date] # str(datetime.now().date())
     df_nlp['date'] = pd.to_datetime(df_nlp['date']).dt.strftime('%Y-%m-%d')
     features = {'pub_date': [], 'features': []}
@@ -63,9 +63,10 @@ def update_bert_pca():
     for i in range(50):
         pca_df = pca_df.rename(columns={i: f'embed_{i}'})
 
-    old_df = pd.read_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'bert_pca.csv')))
+    old_df = pd.read_csv('data/bert_pca.csv')
     pca_df = add_data(old_df, pca_df)
     pca_df.to_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'bert_pca.csv')), index=False)
+    pca_df.to_csv('data/bert_pca.csv', index=False)
 
     return True
 
@@ -75,7 +76,7 @@ def compute_imoex_stats():
     берет данные по imoex за сегодня и считает статистики
     обновляет файл stats_imoex_open.csv
     """
-    df = pd.read_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'imoex10m.csv')))
+    df = pd.read_csv('data/imoex10m.csv')
     df = df.rename(columns={'begin': 'date'})
     df['date'] = pd.to_datetime(df['date'])
     curr_date = date(2023, 8, 25) #datetime.now().date()
@@ -134,7 +135,6 @@ def compute_imoex_stats():
             stats_df[col + '_window5'] = [0] * len(stats_df)
             stats_df[col + '_window7'] = [0] * len(stats_df)
 
-
     dates = list(stats_df.index)
     for i in range(7, len(dates)):
         for k in (2, 3, 5, 7):
@@ -181,9 +181,9 @@ def compute_imoex_stats():
         print('Данных за сегодня нет')
         return False
 
-    old_df = pd.read_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'stats_imoex_open.csv')))
+    old_df = pd.read_csv('data/stats_imoex_open.csv')
     stats_df = add_data(old_df, stats_df)
-    stats_df.to_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'stats_imoex_open.csv')), index=False)
+    stats_df.to_csv('data/stats_imoex_open.csv', index=False)
 
     return True # TODO обработать исключения
 
@@ -193,8 +193,8 @@ def unite_stats_pca():
     объединяет данные из stats_imoex_open.csv и bert_pca.csv за сегодня
     и обновляет файл dataset.csv
     """
-    df_nlp = pd.read_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'bert_pca.csv')))
-    df_series = pd.read_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'stats_imoex_open.csv')))
+    df_nlp = pd.read_csv('data/bert_pca.csv')
+    df_series = pd.read_csv('data/stats_imoex_open.csv')
     df_nlp.date = df_nlp.date.astype('str')
     df_series.date = df_series.date.astype('str')
     df_nlp = df_nlp[df_nlp['date'] == test_date] # str(datetime.now().date())
@@ -205,7 +205,8 @@ def unite_stats_pca():
         print(f'failed to merge: {ex}')
         return False
     print(df)
-    old_df = pd.read_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'dataset.csv')))
+
+    old_df = pd.read_csv('data/dataset.csv')
     df = add_data(old_df, df)
-    df.to_csv(os.path.abspath(os.path.join(os.getcwd(), '..', '..', 'data', 'dataset.csv')), index=False)
+    df.to_csv('data/dataset.csv', index=False)
     return True
